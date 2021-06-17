@@ -1,10 +1,7 @@
 package ru.netology.nmedia.ui
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PointF
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
@@ -108,19 +105,23 @@ class StatsView @JvmOverloads constructor(
             return
         }
 
+        paint.color = Color.LTGRAY
+        canvas.drawCircle(oval.centerX(), oval.centerY(), oval.height() / 2, paint)
+
         var startFrom = -90F
         for ((index, datum) in data.withIndex()) {
-            val angle = 360F * datum / data.sum()
+            val angle = 360F * datum // data.sum()
             paint.color = colors.getOrNull(index) ?: randomColor()
             canvas.drawArc(oval, startFrom, angle, false, paint)
             startFrom += angle
         }
 
         paint.color = colors.getOrNull(0) ?: randomColor()
-        canvas.drawCircle(oval.centerX(), oval.top, 1F, paint )
+        canvas.drawCircle(oval.centerX(), oval.top, 1F, paint)
 
         canvas.drawText(
-            "%.2f%%".format(data.sum() / data.sum() * 100),
+//            "%.2f%%".format(data.sum() / data.sum() * 100),
+            "%.2f%%".format(data.sum() * 100),
             center.x,
             center.y + textPaint.textSize / 4,
             textPaint,
