@@ -114,10 +114,16 @@ class StatsView @JvmOverloads constructor(
         canvas.drawCircle(oval.centerX(), oval.centerY(), oval.height() / 2, paint)
 
         var startFrom = -90F
+        val progressAngle = 360F * progress - 90F
         for ((index, datum) in data.withIndex()) {
             val angle = 360F * datum
             paint.color = colors.getOrNull(index) ?: randomColor()
-            canvas.drawArc(oval, startFrom, angle * progress, false, paint)
+            if (startFrom < progressAngle) {
+                var sweepAngle = if (progress < data.sum())
+                    (progressAngle - startFrom)
+                else (360F * data.sum() - 90F - startFrom)
+                canvas.drawArc(oval, startFrom, sweepAngle, false, paint)
+            }
             startFrom += angle
         }
 
@@ -144,7 +150,7 @@ class StatsView @JvmOverloads constructor(
                 progress = anim.animatedValue as Float
                 invalidate()
             }
-            duration = 2500
+            duration = 5000
             interpolator = LinearInterpolator()
         }.also {
             it.start()
