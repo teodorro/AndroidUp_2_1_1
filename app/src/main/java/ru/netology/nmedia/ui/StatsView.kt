@@ -116,6 +116,9 @@ class StatsView @JvmOverloads constructor(
             startFrom += angle
         }
 
+        paint.color = colors.getOrNull(0) ?: randomColor()
+        canvas.drawCircle(oval.centerX(), oval.top, 1F, paint )
+
         canvas.drawText(
             "%.2f%%".format(data.sum() / data.sum() * 100),
             center.x,
